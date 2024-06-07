@@ -1,8 +1,10 @@
 import discord
 import os
+from dotenv import load_dotenv
 from discord.ext import commands
 
-TOKEN = kani_TOKEN
+load_dotenv()
+TOKEN = os.getenv('kani_TOKEN')  # 🦀bot
 # TOKEN = os.getenv('cps_TOKEN')  # カスタム大会bot
 
 intents = discord.Intents.default()
