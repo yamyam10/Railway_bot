@@ -2,7 +2,7 @@ import discord
 import os
 from discord.ext import commands
 
-TOKEN = kani_TOKEN  # 🦀bot
+TOKEN = kani_TOKEN
 # TOKEN = os.getenv('cps_TOKEN')  # カスタム大会bot
 
 intents = discord.Intents.default()
