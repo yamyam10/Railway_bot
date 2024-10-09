@@ -1,1 +1,6 @@
 discord.py==2.1.1
+discord.py
+requests
+python-dotenv
+ffmpeg-python
+asyncio
