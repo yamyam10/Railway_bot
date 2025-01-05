@@ -1,28 +1,21 @@
-FROM python:3.11
+# ベースイメージとしてUbuntuを使用
+FROM ubuntu:20.04
 
-# 作業ディレクトリを設定
-WORKDIR /bot
-
-# 必要なファイルをコピー
-COPY requirements.txt /bot/
-RUN pip install -r requirements.txt
-
-# VOICEVOXエンジンをインストール
+# 必要な依存関係をインストール
 RUN apt-get update && apt-get install -y \
-    curl \
-    && curl -fsSL https://get.docker.com -o get-docker.sh \
-    && sh get-docker.sh \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    wget \
+    unzip \
+    python3 \
+    python3-pip \
+    ffmpeg \
+    libsndfile1
 
-# supervisordをインストールして複数プロセスを管理
-RUN apt-get update && apt-get install -y supervisor
+# VOICEVOXエンジンをダウンロードしてインストール
+RUN wget https://github.com/VOICEVOX/voicevox_engine/releases/download/v0.10.1/voicevox_engine-0.10.1-linux-x86_64.tar.bz2
+RUN tar -xvjf voicevox_engine-0.10.1-linux-x86_64.tar.bz2
 
-# Supervisordの設定を追加
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# VOICEVOXエンジンの依存関係をインストール
+RUN cd voicevox_engine && pip3 install -r requirements.txt
 
-# 全ファイルをコンテナにコピー
-COPY . /bot
-
-# SupervisordでPythonボットとVOICEVOXエンジンを同時に起動
-CMD ["/usr/bin/supervisord"]
+# サーバーを起動
+CMD ["python3", "voicevox_engine/app.py"]
